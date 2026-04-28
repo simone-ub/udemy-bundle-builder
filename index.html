@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Udemy Business | Bundle Builder</title>
+<style>
+/* ── Password Gate ── */
+#gate {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: linear-gradient(135deg, #3D1A9E 0%, #5624D0 50%, #7C3AED 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+#gate-card {
+  background: white;
+  border-radius: 20px;
+  padding: 48px 44px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+  text-align: center;
+}
+#gate-logo {
+  font-size: 22px;
+  font-weight: 800;
+  color: #5624D0;
+  margin-bottom: 6px;
+}
+#gate-logo span { color: #A435F0; }
+#gate-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 6px;
+}
+#gate-sub {
+  font-size: 13px;
+  color: #6B7280;
+  margin-bottom: 28px;
+}
+#gate-input {
+  width: 100%;
+  padding: 13px 16px;
+  border: 2px solid #E5E7EB;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.18s;
+  text-align: center;
+  letter-spacing: 0.5px;
+  font-family: inherit;
+  margin-bottom: 14px;
+}
+#gate-input:focus { border-color: #5624D0; }
+#gate-input.error { border-color: #DC2626; animation: shake 0.3s ease; }
+#gate-btn {
+  width: 100%;
+  padding: 13px;
+  background: #5624D0;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.18s;
+  font-family: inherit;
+}
+#gate-btn:hover { background: #3D1A9E; }
+#gate-error {
+  font-size: 12px;
+  color: #DC2626;
+  margin-top: 10px;
+  min-height: 16px;
+  font-weight: 600;
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+#app { display: none; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --purple: #5624D0;
+  --purple-dark: #3D1A9E;
+  --purple-light: #A435F0;
+  --purple-pale: #F0EBFF;
+  --altus-orange: #E07A00;
+  --altus-pale: #FFF3E0;
+  --pack-blue: #1D4ED8;
+  --pack-pale: #EEF2FF;
+  --capability-teal: #0891B2;
+  --capability-pale: #E0F7FA;
+  --partner-gray: #374151;
+  --partner-pale: #F3F4F6;
+  --proserv-coral: #DC2626;
+  --proserv-pale: #FEF2F2;
+  --success: #059669;
+  --warning: #D97706;
+  --text: #111827;
+  --text-muted: #6B7280;
+  --border: #E5E7EB;
+  --bg: #F5F3FF;
+  --white: #FFFFFF;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── Header ── */
+.header {
+  background: var(--purple-dark);
+  color: white;
+  padding: 0 32px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+}
+.logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+.logo span { color: #A78BFA; }
+.quick-bundles { display: flex; gap: 8px; }
+.qbtn {
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1.5px solid rgba(255,255,255,0.35);
+  background: transparent;
+  color: rgba(255,255,255,0.85);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+  white-space: nowrap;
+}
+.qbtn:hover, .qbtn.active {
+  background: white;
+  color: var(--purple);
+  border-color: white;
+}
+.field-badge {
+  background: rgba(167,139,250,0.25);
+  border: 1px solid rgba(167,139,250,0.5);
+  color: #C4B5FD;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-left: 16px;
+}
+
+/* ── Hero ── */
+.hero {
+  background: linear-gradient(135deg, var(--purple) 0%, #7C3AED 60%, #A855F7 100%);
+  color: white;
+  padding: 48px 40px 52px;
+  text-align: center;
+}
+.hero-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  opacity: 0.65;
+  margin-bottom: 12px;
+}
+.hero h1 {
+  font-size: 36px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  margin-bottom: 14px;
+}
+.hero p {
+  font-size: 15px;
+  opacity: 0.8;
+  max-width: 560px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+.hero-rule {
+  margin-top: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+/* ── Layout ── */
+.main {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px 24px 60px;
+  align-items: start;
+}
+
+/* ── Sections ── */
+.section { margin-bottom: 36px; }
+.section-header { margin-bottom: 18px; }
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+.section-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.section-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ── Base Plan Cards ── */
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.plan-card {
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 26px 22px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.plan-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: transparent;
+  transition: background 0.2s;
+}
+.plan-card:hover {
+  border-color: var(--purple);
+  box-shadow: 0 8px 28px rgba(86,36,208,0.14);
+  transform: translateY(-2px);
+}
+.plan-card.selected {
+  border-color: var(--purple);
+  background: var(--purple-pale);
+}
+.plan-card.selected::after { background: var(--purple); }
+.plan-name {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--purple);
+  margin-bottom: 4px;
+}
+.plan-tagline {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+.plan-features { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.plan-features li {
+  font-size: 13px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.4;
+}
+.plan-features li .check { color: var(--success); font-weight: 700; flex-shrink: 0; }
+.plan-sel-check {
+  position: absolute;
+  top: 18px; right: 18px;
+  width: 26px; height: 26px;
+  background: var(--purple);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 13px; font-weight: 700;
+}
+.mcp-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--purple-pale);
+  color: var(--purple);
+  border: 1px solid rgba(86,36,208,0.2);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
+/* ── Add-on Cards generic ── */
+.addon-card {
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+.addon-card:hover:not(.disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.09);
+}
+.addon-card.disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.addon-card.selected { border-width: 2px; }
+
+.addon-name { font-size: 14px; font-weight: 800; margin-bottom: 5px; }
+.addon-sub { font-size: 11px; font-weight: 700; margin-bottom: 8px; }
+.addon-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+
+/* ── Badges ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+.badge-rec { background: #D1FAE5; color: #065F46; }
+.badge-upgrade { background: #FEF3C7; color: #92400E; }
+.badge-locked { background: #F3F4F6; color: #9CA3AF; }
+
+/* ── Altus grid ── */
+.altus-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.altus-card {
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+.altus-card:hover:not(.disabled) {
+  border-color: var(--altus-orange);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(224,122,0,0.12);
+}
+.altus-card.selected {
+  border-color: var(--altus-orange);
+  background: var(--altus-pale);
+}
+.altus-card.disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+.altus-name { font-size: 14px; font-weight: 800; color: var(--altus-orange); margin-bottom: 5px; }
+.altus-loop {
+  font-size: 11px; font-weight: 700; color: #B45309;
+  background: #FEF3C7; border-radius: 4px;
+  padding: 2px 7px; display: inline-block; margin-bottom: 10px;
+}
+
+/* ── Pack grid ── */
+.pack-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.pack-card.selected {
+  border-color: var(--pack-blue);
+  background: var(--pack-pale);
+}
+
+/* ── Capability grid ── */
+.cap-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.cap-card.selected {
+  border-color: var(--capability-teal);
+  background: var(--capability-pale);
+}
+
+/* ── Partner grid ── */
+.partner-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.partner-card.selected {
+  border-color: var(--partner-gray);
+  background: var(--partner-pale);
+}
+
+/* ── Pro Serv ── */
+.proserv-card.selected {
+  border-color: var(--proserv-coral);
+  background: var(--proserv-pale);
+}
+.proserv-avail {
+  font-size: 12px;
+  color: var(--text-muted);
+  background: #F9FAFB;
+  border-radius: 6px;
+  padding: 10px 14px;
+  border-left: 3px solid var(--border);
+  margin-top: 10px;
+}
+
+/* ── Eligibility note ── */
+.elig-note {
+  font-size: 12px;
+  color: var(--text-muted);
+  background: white;
+  border-radius: 6px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  margin-top: 12px;
+  line-height: 1.6;
+}
+
+/* ── Summary Sidebar ── */
+.summary { position: sticky; top: 76px; }
+.summary-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.09);
+}
+.summary-head {
+  background: linear-gradient(135deg, var(--purple) 0%, #7C3AED 100%);
+  color: white;
+  padding: 20px 22px;
+}
+.summary-head-title { font-size: 15px; font-weight: 800; margin-bottom: 3px; }
+.summary-head-sub { font-size: 12px; opacity: 0.75; }
+.summary-body { padding: 18px 20px; }
+
+.bundle-indicator {
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  font-weight: 700;
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+.bundle-indicator.match { background: #D1FAE5; color: #065F46; display: flex; }
+.bundle-indicator.custom { background: #FEF3C7; color: #92400E; display: flex; }
+
+.sum-section { margin-bottom: 14px; }
+.sum-label {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 7px;
+}
+.sum-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 9px 11px;
+  border-radius: 7px;
+  margin-bottom: 5px;
+}
+.sum-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+.sum-item-name { font-size: 12px; font-weight: 700; }
+.sum-item-sub { font-size: 11px; color: var(--text-muted); }
+.sum-empty { font-size: 12px; color: var(--text-muted); font-style: italic; padding: 4px 2px; }
+.sum-divider { height: 1px; background: var(--border); margin: 12px 0; }
+.sum-included {
+  font-size: 11px; font-weight: 700;
+  background: var(--purple-pale); color: var(--purple);
+  border-radius: 20px; padding: 3px 10px;
+  display: inline-block;
+}
+
+.reset-btn {
+  width: 100%;
+  margin-top: 14px;
+  padding: 9px;
+  border: 1.5px solid var(--border);
+  background: white;
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.18s;
+  font-weight: 600;
+}
+.reset-btn:hover { border-color: var(--purple); color: var(--purple); }
+
+.expansion-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-top: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.expansion-title {
+  font-size: 10px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 1px;
+  color: var(--text-muted); margin-bottom: 10px;
+}
+.expansion-row {
+  font-size: 12px; color: var(--text-muted);
+  line-height: 1.7; display: flex; gap: 8px;
+}
+.expansion-row strong { color: var(--text); }
+
+/* ── Responsive ── */
+@media (max-width: 1100px) {
+  .main { grid-template-columns: 1fr; }
+  .summary { position: static; }
+  .pack-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .plan-grid, .altus-grid, .cap-grid, .partner-grid { grid-template-columns: 1fr; }
+  .pack-grid { grid-template-columns: 1fr 1fr; }
+  .main { padding: 16px; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 26px; }
+  .header { padding: 0 16px; }
+  .quick-bundles { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Password Gate ── -->
+<div id="gate">
+  <div id="gate-card">
+    <div id="gate-logo">ūdemy <span>business</span></div>
+    <div id="gate-title" style="margin-top:16px;">Field Enablement Tool</div>
+    <div id="gate-sub">Enter the access passphrase to continue</div>
+    <input id="gate-input" type="password" placeholder="Passphrase" autocomplete="off"
+      onkeydown="if(event.key==='Enter')checkPass()">
+    <button id="gate-btn" onclick="checkPass()">Unlock →</button>
+    <div id="gate-error"></div>
+  </div>
+</div>
+
+<!-- ── App (hidden until auth) ── -->
+<div id="app">
+
+<!-- ── Header ── -->
+<header class="header">
+  <div class="logo">ūdemy <span>business</span></div>
+  <div style="display:flex; align-items:center; gap:8px;">
+    <div class="quick-bundles">
+      <button class="qbtn" onclick="loadBundle('team', this)">Team Bundle</button>
+      <button class="qbtn" onclick="loadBundle('growth', this)">Growth Bundle</button>
+      <button class="qbtn" onclick="loadBundle('enterprise', this)">Enterprise Bundle</button>
+    </div>
+    <div class="field-badge">Field Guide</div>
+  </div>
+</header>
+
+<!-- ── Hero ── -->
+<div class="hero">
+  <div class="hero-eyebrow">Udemy Business · SKU Lineup 2025</div>
+  <h1>Bundle Builder</h1>
+  <p>Start with the recommended bundle for your customer's segment, then expand by scale or depth. Lead with a recommendation — not a menu of options.</p>
+  <div class="hero-rule">
+    💡 Base plans define <strong style="margin:0 3px;">"who you are"</strong> · Add-ons define <strong style="margin:0 3px;">"what you can do"</strong>
+  </div>
+</div>
+
+<!-- ── Main ── -->
+<div class="main">
+  <div class="builder">
+
+    <!-- Step 1: Base Plan -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-eyebrow" style="background:var(--purple-pale); color:var(--purple);">Step 1 · Required</div>
+        <div class="section-title">Choose a Base Plan</div>
+        <div class="section-sub">Segmented by scale, complexity, and buying motion. Fenced by seat count, content, governance, reporting, and integration capabilities.</div>
+      </div>
+      <div class="plan-grid">
+
+        <div class="plan-card" data-plan="team" onclick="selectPlan('team')">
+          <div class="plan-name">Team</div>
+          <div class="plan-tagline">Small teams getting started with structured L&D</div>
+          <ul class="plan-features">
+            <li><span class="check">✓</span> Core course library access</li>
+            <li><span class="check">✓</span> Standard reporting & analytics</li>
+            <li><span class="check">✓</span> Basic integrations</li>
+            <li><span class="check">✓</span> ~5–500 seats</li>
+          </ul>
+          <div style="margin-top:16px;"><span class="mcp-tag">⚡ AI Connectors (MCP) included</span></div>
+        </div>
+
+        <div class="plan-card" data-plan="growth" onclick="selectPlan('growth')">
+          <div class="plan-name">Growth</div>
+          <div class="plan-tagline">Scaling orgs with mid-market complexity & buying motion</div>
+          <ul class="plan-features">
+            <li><span class="check">✓</span> Full course library + curated paths</li>
+            <li><span class="check">✓</span> Advanced analytics & reporting</li>
+            <li><span class="check">✓</span> Enhanced governance controls</li>
+            <li><span class="check">✓</span> Professional Services eligible</li>
+          </ul>
+          <div style="margin-top:16px;"><span class="mcp-tag">⚡ AI Connectors (MCP) included</span></div>
+        </div>
+
+        <div class="plan-card" data-plan="enterprise" onclick="selectPlan('enterprise')">
+          <div class="plan-name">Enterprise</div>
+          <div class="plan-tagline">Complex, org-wide learning — full platform access</div>
+          <ul class="plan-features">
+            <li><span class="check">✓</span> Full platform + all add-on compatible</li>
+            <li><span class="check">✓</span> Enterprise SSO, compliance & governance</li>
+            <li><span class="check">✓</span> Deep integrations + custom APIs</li>
+            <li><span class="check">✓</span> Full content, analytics & reporting suite</li>
+          </ul>
+          <div style="margin-top:16px;"><span class="mcp-tag">⚡ AI Connectors (MCP) included</span></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Step 2: Altus -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-eyebrow" style="background:var(--altus-pale); color:var(--altus-orange);">Step 2 · AI Orchestration</div>
+        <div class="section-title">Altus — The Intelligence Layer</div>
+        <div class="section-sub">Central AI layer that analyzes, decides, and acts. Default tier mapped to base plan. Cross-plan upgrades available with controlled flexibility.</div>
+      </div>
+      <div class="altus-grid">
+
+        <div class="altus-card" data-tier="analyze" onclick="selectAltus('analyze')">
+          <span class="badge" id="analyze-badge">Default · Team</span>
+          <div class="altus-name">Altus: Analyze</div>
+          <div class="altus-loop">Analyze loop</div>
+          <div class="addon-desc">Surfaces insights from learning data — skill gaps, program performance, learner behavior — to guide L&D decisions. The foundation of AI-powered learning intelligence.</div>
+        </div>
+
+        <div class="altus-card" data-tier="analyze-decide" onclick="selectAltus('analyze-decide')">
+          <span class="badge" id="analyze-decide-badge">Default · Growth</span>
+          <div class="altus-name">Altus: Analyze + Decide</div>
+          <div class="altus-loop">Analyze + Decide loop</div>
+          <div class="addon-desc">Goes beyond analysis to actively recommend actions — which programs to prioritize, which skills to close, which learners to focus on next. AI moves from insight to prescription.</div>
+        </div>
+
+        <div class="altus-card" data-tier="full-loop" onclick="selectAltus('full-loop')">
+          <span class="badge" id="full-loop-badge">Default · Enterprise</span>
+          <div class="altus-name">Altus: Full Loop</div>
+          <div class="altus-loop">Analyze + Decide + Deploy + Adapt</div>
+          <div class="addon-desc">Full AI autonomy. Analyzes gaps, recommends actions, deploys programs, and continuously adapts based on outcomes. The complete intelligence loop — AI-native L&D at scale.</div>
+        </div>
+
+      </div>
+      <div class="elig-note" id="altus-note">Select a base plan above to see default Altus tier and upgrade options.</div>
+    </div>
+
+    <!-- Step 3: AI Packs -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-eyebrow" style="background:var(--pack-pale); color:var(--pack-blue);">Step 3 · Programmatic Add-on</div>
+        <div class="section-title">AI Program Pack</div>
+        <div class="section-sub">Curated, outcome-mapped programs designed for your customer's AI maturity stage. Recommended via AI Readiness scoring. Default: 1 pack per bundle.</div>
+      </div>
+      <div class="pack-grid">
+
+        <div class="addon-card pack-card" data-pack="explorer" onclick="selectPack('explorer')">
+          <span class="badge" id="explorer-badge">Explorer / Builder tier</span>
+          <div class="addon-name" style="color:var(--pack-blue);">AI Explorer Pack</div>
+          <div class="addon-desc">Builds foundational AI literacy org-wide. Ideal for customers at the start of their AI journey. Maps to Team plan.</div>
+        </div>
+
+        <div class="addon-card pack-card" data-pack="builder" onclick="selectPack('builder')">
+          <span class="badge" id="builder-badge">Explorer / Builder tier</span>
+          <div class="addon-name" style="color:var(--pack-blue);">AI Builder Pack</div>
+          <div class="addon-desc">Moves from literacy to hands-on application. Teams learn to build with AI in their day-to-day workflow. Maps to Team plan.</div>
+        </div>
+
+        <div class="addon-card pack-card" data-pack="scaler" onclick="selectPack('scaler')">
+          <span class="badge" id="scaler-badge">Growth / Enterprise tier</span>
+          <div class="addon-name" style="color:var(--pack-blue);">AI Scaler Pack</div>
+          <div class="addon-desc">Scales AI adoption across the org with role-specific implementation tracks. For teams ready to operationalize AI. Maps to Growth + Enterprise.</div>
+        </div>
+
+        <div class="addon-card pack-card" data-pack="leader" onclick="selectPack('leader')">
+          <span class="badge" id="leader-badge">Enterprise tier only</span>
+          <div class="addon-name" style="color:var(--pack-blue);">AI Leader Pack</div>
+          <div class="addon-desc">Strategic AI leadership development for C-suite and senior managers. Drives AI transformation from the top. Enterprise only.</div>
+        </div>
+
+      </div>
+      <div class="elig-note" id="pack-note">Select a base plan to see eligible and recommended AI packs. Explorer/Builder → Team; Scaler → Growth + Enterprise; Leader → Enterprise only.</div>
+    </div>
+
+    <!-- Step 4: Capability Add-ons -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-eyebrow" style="background:var(--capability-pale); color:var(--capability-teal);">Step 4 · Optional</div>
+        <div class="section-title">Capability Add-ons</div>
+        <div class="section-sub">Enables specific capability expansion on top of the base plan. Added based on customer need with tier-based eligibility.</div>
+      </div>
+      <div class="cap-grid">
+
+        <div class="addon-card cap-card" data-cap="ubpro" onclick="toggleCap('ubpro')">
+          <div class="addon-name" style="color:var(--capability-teal);">Udemy Business Pro</div>
+          <div class="addon-sub" style="color:var(--capability-teal);">Labs + Workspaces</div>
+          <div class="addon-desc">Hands-on, practice-based learning with cloud sandboxes and coding environments. Ideal for technical upskilling and role-based application of skills.</div>
+        </div>
+
+        <div class="addon-card cap-card" data-cap="roleplay" onclick="toggleCap('roleplay')">
+          <div class="addon-name" style="color:var(--capability-teal);">AI Role Play Enhanced</div>
+          <div class="addon-sub" style="color:var(--capability-teal);">Real-life practice</div>
+          <div class="addon-desc">AI-powered behavioral simulations — sales conversations, leadership scenarios, customer service. Deep skill practice in realistic, low-stakes environments.</div>
+        </div>
+
+        <div class="addon-card cap-card" data-cap="support" onclick="toggleCap('support')">
+          <div class="addon-name" style="color:var(--capability-teal);">Premium Support</div>
+          <div class="addon-sub" style="color:var(--capability-teal);">White-glove partnership</div>
+          <div class="addon-desc">Dedicated CSM, priority SLAs, strategic business reviews, and accelerated onboarding. For customers who need a true partnership — not just a product.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Step 5: Partner Add-ons -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-eyebrow" style="background:var(--partner-pale); color:var(--partner-gray);">Step 5 · Optional</div>
+        <div class="section-title">Partner Add-ons</div>
+        <div class="section-sub">Expansion and deepening of adjacent capabilities. Flexible — can be added to any base plan within partnership agreement bounds.</div>
+      </div>
+      <div class="partner-grid">
+
+        <div class="addon-card partner-card" data-partner="emtrain" onclick="togglePartner('emtrain')">
+          <div class="addon-name">Emtrain</div>
+          <div class="addon-sub" style="color:var(--partner-gray);">Compliance Training</div>
+          <div class="addon-desc">DEI, harassment prevention, ethics, and workplace compliance content. Meets regulatory requirements across industries. Available on any base plan.</div>
+        </div>
+
+        <div class="addon-card partner-card" data-partner="workera" onclick="togglePartner('workera')">
+          <div class="addon-name">Workera</div>
+          <div class="addon-sub" style="color:var(--partner-gray);">Skills Analytics</div>
+          <div class="addon-desc">AI-powered skills assessments and benchmarking. Measure the skills gap, track learning progress, and align program investment to business outcomes.</div>
+        </div>
+
+        <div class="addon-card partner-card" data-partner="pearson" onclick="togglePartner('pearson')">
+          <div class="addon-name">Pearson</div>
+          <div class="addon-sub" style="color:var(--partner-gray);">Credentialing & Workforce Intelligence</div>
+          <div class="addon-desc">Industry certifications, verified credentials, and workforce analytics. Connects learning to external recognition and career development pathways.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Step 6: Pro Services -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-eyebrow" style="background:var(--proserv-pale); color:var(--proserv-coral);">Step 6 · Optional</div>
+        <div class="section-title">Professional Services</div>
+        <div class="section-sub">Expert-led implementation and strategic support. Available to Growth plan and up.</div>
+      </div>
+      <div class="addon-card proserv-card disabled" id="proserv-card" onclick="toggleProserv()" style="max-width:420px;">
+        <div class="addon-name" style="color:var(--proserv-coral);">Professional Services</div>
+        <div class="addon-sub" style="color:var(--proserv-coral);">Strategic implementation & change management</div>
+        <div class="addon-desc">Learning strategy consulting, custom program design, change management, and onboarding support. Drives faster time-to-value and deeper program adoption.</div>
+        <div class="badge badge-locked" id="proserv-lock" style="margin-top:12px;">Requires Growth or Enterprise plan</div>
+      </div>
+    </div>
+
+  </div><!-- /builder -->
+
+  <!-- ── Summary Sidebar ── -->
+  <div class="summary">
+    <div class="summary-card">
+      <div class="summary-head">
+        <div class="summary-head-title">Your Bundle Summary</div>
+        <div class="summary-head-sub" id="sum-subtitle">Select a base plan to get started</div>
+      </div>
+      <div class="summary-body">
+
+        <div class="bundle-indicator" id="bundle-indicator">
+          <span id="bundle-icon"></span>
+          <span id="bundle-text"></span>
+        </div>
+
+        <div class="sum-section">
+          <div class="sum-label">Base Plan</div>
+          <div id="sum-plan"><div class="sum-empty">No plan selected</div></div>
+        </div>
+        <div class="sum-divider"></div>
+
+        <div class="sum-section">
+          <div class="sum-label">AI Orchestration (Altus)</div>
+          <div id="sum-altus"><div class="sum-empty">—</div></div>
+        </div>
+        <div class="sum-divider"></div>
+
+        <div class="sum-section">
+          <div class="sum-label">AI Program Pack</div>
+          <div id="sum-pack"><div class="sum-empty">—</div></div>
+        </div>
+        <div class="sum-divider"></div>
+
+        <div class="sum-section">
+          <div class="sum-label">Capability Add-ons</div>
+          <div id="sum-caps"><div class="sum-empty">None selected</div></div>
+        </div>
+        <div class="sum-divider"></div>
+
+        <div class="sum-section">
+          <div class="sum-label">Partner Add-ons</div>
+          <div id="sum-partners"><div class="sum-empty">None selected</div></div>
+        </div>
+        <div class="sum-divider"></div>
+
+        <div class="sum-section">
+          <div class="sum-label">Professional Services</div>
+          <div id="sum-proserv"><div class="sum-empty">Not included</div></div>
+        </div>
+        <div class="sum-divider"></div>
+
+        <div class="sum-section" style="margin-bottom:0;">
+          <div class="sum-label">Always Included</div>
+          <span class="sum-included">⚡ AI Connectors (MCP)</span>
+        </div>
+
+        <button class="reset-btn" onclick="resetAll()">↺ Reset builder</button>
+      </div>
+    </div>
+
+    <div class="expansion-card">
+      <div class="expansion-title">Expansion Paths</div>
+      <div class="expansion-row" style="margin-bottom:8px;">
+        <span style="font-size:16px;">↑</span>
+        <div><strong>Scale</strong> — Upgrade the base plan<br><span style="font-size:11px;">Team → Growth → Enterprise</span></div>
+      </div>
+      <div class="expansion-row">
+        <span style="font-size:16px;">↓</span>
+        <div><strong>Depth</strong> — Layer in add-ons<br><span style="font-size:11px;">Capability · Partner · Pro Services</span></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+const S = {
+  plan: null,
+  altus: null,
+  pack: null,
+  caps: new Set(),
+  partners: new Set(),
+  proserv: false
+};
+
+const DEFAULTS = {
+  team:       { altus: 'analyze',        pack: 'explorer' },
+  growth:     { altus: 'analyze-decide', pack: 'scaler' },
+  enterprise: { altus: 'full-loop',      pack: 'leader' }
+};
+
+const PLAN_LABEL = { team: 'Team Plan', growth: 'Growth Plan', enterprise: 'Enterprise Plan' };
+const ALTUS_LABEL = {
+  'analyze': 'Altus: Analyze',
+  'analyze-decide': 'Altus: Analyze + Decide',
+  'full-loop': 'Altus: Full Loop'
+};
+const PACK_LABEL = { explorer: 'AI Explorer Pack', builder: 'AI Builder Pack', scaler: 'AI Scaler Pack', leader: 'AI Leader Pack' };
+const CAP_LABEL = { ubpro: 'Udemy Business Pro', roleplay: 'AI Role Play Enhanced', support: 'Premium Support' };
+const PARTNER_LABEL = { emtrain: 'Emtrain — Compliance Training', workera: 'Workera — Skills Analytics', pearson: 'Pearson — Credentialing' };
+
+const PACK_ELIGIBLE = { team: ['explorer','builder'], growth: ['explorer','builder','scaler'], enterprise: ['explorer','builder','scaler','leader'] };
+const PACK_REC      = { team: 'explorer', growth: 'scaler', enterprise: 'leader' };
+
+/* ─── Select Plan ─── */
+function selectPlan(plan) {
+  S.plan = plan;
+
+  document.querySelectorAll('.plan-card').forEach(c => {
+    c.classList.remove('selected');
+    const chk = c.querySelector('.plan-sel-check');
+    if (chk) chk.remove();
+  });
+  const pc = document.querySelector(`.plan-card[data-plan="${plan}"]`);
+  pc.classList.add('selected');
+  const chk = document.createElement('div');
+  chk.className = 'plan-sel-check'; chk.textContent = '✓';
+  pc.appendChild(chk);
+
+  const def = DEFAULTS[plan];
+  setAltus(def.altus);
+  updateAltusBadges(plan);
+  updatePackEligibility(plan);
+  setPack(def.pack);
+
+  const ps = document.getElementById('proserv-card');
+  if (plan === 'team') {
+    ps.classList.add('disabled');
+    document.getElementById('proserv-lock').style.display = 'inline-flex';
+    if (S.proserv) { S.proserv = false; ps.classList.remove('selected'); }
+  } else {
+    ps.classList.remove('disabled');
+    document.getElementById('proserv-lock').style.display = 'none';
+  }
+
+  updateSummary();
+  updateBundleIndicator();
+  updateQuickBtns(plan);
+}
+
+/* ─── Altus ─── */
+function setAltus(tier) {
+  S.altus = tier;
+  document.querySelectorAll('.altus-card').forEach(c => c.classList.remove('selected'));
+  const el = document.querySelector(`.altus-card[data-tier="${tier}"]`);
+  if (el) el.classList.add('selected');
+}
+
+function selectAltus(tier) {
+  setAltus(tier);
+  updateSummary();
+  updateBundleIndicator();
+}
+
+function updateAltusBadges(plan) {
+  const tiers = ['analyze', 'analyze-decide', 'full-loop'];
+  const defMap = { team: 'analyze', growth: 'analyze-decide', enterprise: 'full-loop' };
+  const defTier = defMap[plan];
+
+  tiers.forEach(t => {
+    const b = document.getElementById(t + '-badge');
+    if (t === defTier) {
+      b.className = 'badge badge-rec';
+      b.textContent = `★ Default · ${PLAN_LABEL[plan]}`;
+    } else {
+      b.className = 'badge badge-upgrade';
+      const tierLabel = { analyze: 'Analyze', 'analyze-decide': 'Analyze + Decide', 'full-loop': 'Full Loop' };
+      b.textContent = '⬆ Upgrade available';
+    }
+  });
+
+  document.getElementById('altus-note').textContent =
+    `Default for ${PLAN_LABEL[plan]}: ${ALTUS_LABEL[defMap[plan]]}. Higher tiers available cross-plan with controlled flexibility.`;
+}
+
+/* ─── AI Packs ─── */
+function updatePackEligibility(plan) {
+  const eligible = PACK_ELIGIBLE[plan] || [];
+  const rec = PACK_REC[plan];
+
+  document.querySelectorAll('.pack-card').forEach(c => {
+    const pack = c.dataset.pack;
+    const b = document.getElementById(pack + '-badge');
+    if (!eligible.includes(pack)) {
+      c.classList.add('disabled');
+      b.className = 'badge badge-locked';
+      b.textContent = 'Not available for this plan';
+    } else if (pack === rec) {
+      c.classList.remove('disabled');
+      b.className = 'badge badge-rec';
+      b.textContent = '★ Recommended';
+    } else {
+      c.classList.remove('disabled');
+      b.className = 'badge';
+      b.style.cssText = 'background:var(--pack-pale); color:var(--pack-blue);';
+      const tierTxt = { explorer:'Explorer / Builder tier', builder:'Explorer / Builder tier', scaler:'Growth / Enterprise tier', leader:'Enterprise tier only' };
+      b.textContent = tierTxt[pack];
+    }
+  });
+
+  document.getElementById('pack-note').textContent =
+    `Recommended for ${PLAN_LABEL[plan]}: ${PACK_LABEL[rec]}. Select one pack per bundle.`;
+}
+
+function setPack(pack) {
+  S.pack = pack;
+  document.querySelectorAll('.pack-card').forEach(c => c.classList.remove('selected'));
+  const el = document.querySelector(`.pack-card[data-pack="${pack}"]`);
+  if (el && !el.classList.contains('disabled')) el.classList.add('selected');
+}
+
+function selectPack(pack) {
+  if (!S.plan) return;
+  const el = document.querySelector(`.pack-card[data-pack="${pack}"]`);
+  if (el && el.classList.contains('disabled')) return;
+  if (S.pack === pack) {
+    S.pack = null;
+    document.querySelectorAll('.pack-card').forEach(c => c.classList.remove('selected'));
+  } else {
+    setPack(pack);
+  }
+  updateSummary();
+  updateBundleIndicator();
+}
+
+/* ─── Capability Add-ons ─── */
+function toggleCap(cap) {
+  const el = document.querySelector(`.cap-card[data-cap="${cap}"]`);
+  if (S.caps.has(cap)) { S.caps.delete(cap); el.classList.remove('selected'); }
+  else { S.caps.add(cap); el.classList.add('selected'); }
+  updateSummary();
+  updateBundleIndicator();
+}
+
+/* ─── Partner Add-ons ─── */
+function togglePartner(p) {
+  const el = document.querySelector(`.partner-card[data-partner="${p}"]`);
+  if (S.partners.has(p)) { S.partners.delete(p); el.classList.remove('selected'); }
+  else { S.partners.add(p); el.classList.add('selected'); }
+  updateSummary();
+  updateBundleIndicator();
+}
+
+/* ─── Pro Services ─── */
+function toggleProserv() {
+  if (!S.plan || S.plan === 'team') return;
+  S.proserv = !S.proserv;
+  document.getElementById('proserv-card').classList.toggle('selected', S.proserv);
+  updateSummary();
+  updateBundleIndicator();
+}
+
+/* ─── Summary ─── */
+function updateSummary() {
+  // Plan
+  const sp = document.getElementById('sum-plan');
+  sp.innerHTML = S.plan
+    ? `<div class="sum-item" style="background:var(--purple-pale);">
+        <div class="sum-dot" style="background:var(--purple);"></div>
+        <div><div class="sum-item-name">${PLAN_LABEL[S.plan]}</div><div class="sum-item-sub">⚡ AI Connectors (MCP) included</div></div>
+       </div>`
+    : `<div class="sum-empty">No plan selected</div>`;
+
+  document.getElementById('sum-subtitle').textContent = S.plan ? `${PLAN_LABEL[S.plan]} selected` : 'Select a base plan to get started';
+
+  // Altus
+  const sa = document.getElementById('sum-altus');
+  sa.innerHTML = S.altus
+    ? `<div class="sum-item" style="background:var(--altus-pale);">
+        <div class="sum-dot" style="background:var(--altus-orange);"></div>
+        <div><div class="sum-item-name">${ALTUS_LABEL[S.altus]}</div><div class="sum-item-sub">AI Orchestration layer</div></div>
+       </div>`
+    : `<div class="sum-empty">—</div>`;
+
+  // Pack
+  const spk = document.getElementById('sum-pack');
+  spk.innerHTML = S.pack
+    ? `<div class="sum-item" style="background:var(--pack-pale);">
+        <div class="sum-dot" style="background:var(--pack-blue);"></div>
+        <div><div class="sum-item-name">${PACK_LABEL[S.pack]}</div><div class="sum-item-sub">Programmatic add-on</div></div>
+       </div>`
+    : `<div class="sum-empty">—</div>`;
+
+  // Caps
+  const sc = document.getElementById('sum-caps');
+  sc.innerHTML = S.caps.size > 0
+    ? [...S.caps].map(c => `<div class="sum-item" style="background:var(--capability-pale);">
+        <div class="sum-dot" style="background:var(--capability-teal);"></div>
+        <div class="sum-item-name" style="font-size:12px;">${CAP_LABEL[c]}</div>
+       </div>`).join('')
+    : `<div class="sum-empty">None selected</div>`;
+
+  // Partners
+  const spr = document.getElementById('sum-partners');
+  spr.innerHTML = S.partners.size > 0
+    ? [...S.partners].map(p => `<div class="sum-item" style="background:var(--partner-pale);">
+        <div class="sum-dot" style="background:var(--partner-gray);"></div>
+        <div class="sum-item-name" style="font-size:12px;">${PARTNER_LABEL[p]}</div>
+       </div>`).join('')
+    : `<div class="sum-empty">None selected</div>`;
+
+  // Pro Services
+  const sps = document.getElementById('sum-proserv');
+  sps.innerHTML = S.proserv
+    ? `<div class="sum-item" style="background:var(--proserv-pale);">
+        <div class="sum-dot" style="background:var(--proserv-coral);"></div>
+        <div class="sum-item-name" style="font-size:12px;">Professional Services</div>
+       </div>`
+    : `<div class="sum-empty">Not included</div>`;
+}
+
+/* ─── Bundle Match Indicator ─── */
+function updateBundleIndicator() {
+  const ind = document.getElementById('bundle-indicator');
+  if (!S.plan) { ind.className = 'bundle-indicator'; return; }
+
+  const def = DEFAULTS[S.plan];
+  const isDefault = S.altus === def.altus && S.pack === def.pack && S.caps.size === 0 && S.partners.size === 0 && !S.proserv;
+
+  if (isDefault) {
+    ind.className = 'bundle-indicator match';
+    document.getElementById('bundle-icon').textContent = '✓';
+    document.getElementById('bundle-text').textContent = `Recommended ${PLAN_LABEL[S.plan].replace(' Plan','')} bundle`;
+  } else {
+    ind.className = 'bundle-indicator custom';
+    document.getElementById('bundle-icon').textContent = '✦';
+    document.getElementById('bundle-text').textContent = 'Custom build — adjusted from default';
+  }
+}
+
+/* ─── Quick Bundle Buttons ─── */
+function loadBundle(plan, btn) {
+  // Reset add-ons
+  S.caps.clear(); S.partners.clear(); S.proserv = false;
+  document.querySelectorAll('.cap-card, .partner-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('proserv-card').classList.remove('selected');
+
+  selectPlan(plan);
+
+  document.querySelectorAll('.qbtn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+function updateQuickBtns(plan) {
+  // called internally; don't deactivate — let loadBundle handle it
+}
+
+/* ─── Reset ─── */
+function resetAll() {
+  S.plan = null; S.altus = null; S.pack = null;
+  S.caps.clear(); S.partners.clear(); S.proserv = false;
+
+  document.querySelectorAll('.plan-card').forEach(c => {
+    c.classList.remove('selected');
+    const chk = c.querySelector('.plan-sel-check');
+    if (chk) chk.remove();
+  });
+  document.querySelectorAll('.altus-card, .pack-card, .cap-card, .partner-card').forEach(c => {
+    c.classList.remove('selected');
+  });
+  document.querySelectorAll('.pack-card').forEach(c => c.classList.remove('disabled'));
+  document.getElementById('proserv-card').classList.remove('selected');
+  document.getElementById('proserv-card').classList.add('disabled');
+  document.getElementById('proserv-lock').style.display = 'inline-flex';
+  document.querySelectorAll('.qbtn').forEach(b => b.classList.remove('active'));
+
+  document.getElementById('altus-note').textContent = 'Select a base plan above to see default Altus tier and upgrade options.';
+  document.getElementById('pack-note').textContent = 'Select a base plan to see eligible and recommended AI packs. Explorer/Builder → Team; Scaler → Growth + Enterprise; Leader → Enterprise only.';
+  document.getElementById('bundle-indicator').className = 'bundle-indicator';
+
+  // Reset altus badges
+  const defaultLabels = { 'analyze': 'Default · Team', 'analyze-decide': 'Default · Growth', 'full-loop': 'Default · Enterprise' };
+  Object.entries(defaultLabels).forEach(([k, v]) => {
+    const b = document.getElementById(k + '-badge');
+    b.className = 'badge'; b.style.cssText = '';
+    b.textContent = v;
+  });
+
+  // Reset pack badges
+  const packLabels = { explorer: 'Explorer / Builder tier', builder: 'Explorer / Builder tier', scaler: 'Growth / Enterprise tier', leader: 'Enterprise tier only' };
+  Object.entries(packLabels).forEach(([k, v]) => {
+    const b = document.getElementById(k + '-badge');
+    b.className = 'badge'; b.style.cssText = 'background:var(--pack-pale); color:var(--pack-blue);';
+    b.textContent = v;
+  });
+
+  updateSummary();
+}
+
+// init
+updateSummary();
+</script>
+
+</div><!-- /app -->
+
+<script>
+(function() {
+  const PASS = 'Udemy is the Future';
+  const KEY = 'ub_bundle_auth';
+
+  function unlock() {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+  }
+
+  if (sessionStorage.getItem(KEY) === '1') { unlock(); return; }
+
+  window.checkPass = function() {
+    const val = document.getElementById('gate-input').value;
+    if (val === PASS) {
+      sessionStorage.setItem(KEY, '1');
+      unlock();
+    } else {
+      const input = document.getElementById('gate-input');
+      const err = document.getElementById('gate-error');
+      input.classList.add('error');
+      err.textContent = 'Incorrect passphrase — try again.';
+      input.value = '';
+      setTimeout(() => input.classList.remove('error'), 400);
+    }
+  };
+})();
+</script>
+</body>
+</html>
