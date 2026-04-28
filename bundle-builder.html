@@ -5,6 +5,87 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Udemy Business | Bundle Builder</title>
 <style>
+/* ── Password Gate ── */
+#gate {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: linear-gradient(135deg, #3D1A9E 0%, #5624D0 50%, #7C3AED 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+#gate-card {
+  background: white;
+  border-radius: 20px;
+  padding: 48px 44px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+  text-align: center;
+}
+#gate-logo {
+  font-size: 22px;
+  font-weight: 800;
+  color: #5624D0;
+  margin-bottom: 6px;
+}
+#gate-logo span { color: #A435F0; }
+#gate-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 6px;
+}
+#gate-sub {
+  font-size: 13px;
+  color: #6B7280;
+  margin-bottom: 28px;
+}
+#gate-input {
+  width: 100%;
+  padding: 13px 16px;
+  border: 2px solid #E5E7EB;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.18s;
+  text-align: center;
+  letter-spacing: 0.5px;
+  font-family: inherit;
+  margin-bottom: 14px;
+}
+#gate-input:focus { border-color: #5624D0; }
+#gate-input.error { border-color: #DC2626; animation: shake 0.3s ease; }
+#gate-btn {
+  width: 100%;
+  padding: 13px;
+  background: #5624D0;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.18s;
+  font-family: inherit;
+}
+#gate-btn:hover { background: #3D1A9E; }
+#gate-error {
+  font-size: 12px;
+  color: #DC2626;
+  margin-top: 10px;
+  min-height: 16px;
+  font-weight: 600;
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+#app { display: none; }
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -490,6 +571,22 @@ body {
 </style>
 </head>
 <body>
+
+<!-- ── Password Gate ── -->
+<div id="gate">
+  <div id="gate-card">
+    <div id="gate-logo">ūdemy <span>business</span></div>
+    <div id="gate-title" style="margin-top:16px;">Field Enablement Tool</div>
+    <div id="gate-sub">Enter the access passphrase to continue</div>
+    <input id="gate-input" type="password" placeholder="Passphrase" autocomplete="off"
+      onkeydown="if(event.key==='Enter')checkPass()">
+    <button id="gate-btn" onclick="checkPass()">Unlock →</button>
+    <div id="gate-error"></div>
+  </div>
+</div>
+
+<!-- ── App (hidden until auth) ── -->
+<div id="app">
 
 <!-- ── Header ── -->
 <header class="header">
@@ -1104,6 +1201,37 @@ function resetAll() {
 
 // init
 updateSummary();
+</script>
+
+</div><!-- /app -->
+
+<script>
+(function() {
+  const PASS = 'Udemy is the Future';
+  const KEY = 'ub_bundle_auth';
+
+  function unlock() {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+  }
+
+  if (sessionStorage.getItem(KEY) === '1') { unlock(); return; }
+
+  window.checkPass = function() {
+    const val = document.getElementById('gate-input').value;
+    if (val === PASS) {
+      sessionStorage.setItem(KEY, '1');
+      unlock();
+    } else {
+      const input = document.getElementById('gate-input');
+      const err = document.getElementById('gate-error');
+      input.classList.add('error');
+      err.textContent = 'Incorrect passphrase — try again.';
+      input.value = '';
+      setTimeout(() => input.classList.remove('error'), 400);
+    }
+  };
+})();
 </script>
 </body>
 </html>
